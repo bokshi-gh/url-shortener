@@ -10,10 +10,17 @@ import (
 )
 
 func main() {
-	// API routes
-	http.HandleFunc("/api/hello", api.HelloHandler)
+	http.HandleFunc("/api/register", api.RegisterHandler)
+	http.HandleFunc("/api/login", api.LoginHandler)
+	// http.HandleFunc("/api/change-username", api.ChangeUsernameHandler)
+	// http.HandleFunc("/api/change-password", api.ChangePasswordHandler)
+	http.HandleFunc("/api/delete-account", api.DeleteAccountHandler)
 
-	// Serve static frontend
+	http.HandleFunc("/api/add-url", api.AddURLHandler)
+	// http.HandleFunc("/api/change-url", api.ChangeURLHandler)
+	http.HandleFunc("/api/delete-url", api.DeleteURLHandler)
+
+
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		path := filepath.Join("./static", r.URL.Path)

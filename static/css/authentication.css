@@ -6,6 +6,7 @@ main {
 }
 
 main .error {
+	display: none;
 	background-color: red;
 	padding: 0.5rem;
 }

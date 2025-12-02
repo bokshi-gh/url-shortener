@@ -1,0 +1,36 @@
+header {
+	display: flex;
+	flex-direction: column;
+	gap: 0.2rem;
+}
+
+header .username {
+	font-weight: bolder;
+}
+
+header .links {
+	display: flex;
+	gap: 0.5rem;
+}
+
+table {
+	width: 100%;
+}
+
+table, th, td {
+	padding: 0.5rem;
+	border: 1.5px solid black;
+	border-collapse: collapse;
+}
+
+td {
+	width: fit-content;
+	max-width: 1rem;
+	overflow: auto;
+}
+
+@media (min-width: 1000px) {
+	.container {
+		width: 100%;
+	}
+}

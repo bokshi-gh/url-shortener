@@ -6,10 +6,13 @@ import (
 	"os"
 	"path/filepath"
 
-	"url-shortner/handlers"
+	"url-shortener/database"
+	"url-shortener/handlers"
 )
 
 func main() {
+	db.Connect();
+
 	http.HandleFunc("/register", handlers.RegisterHandler)
 	// http.HandleFunc("/login", handlers.LoginHandler)
 	// http.HandleFunc("/delete-account", handlers.DeleteAccountHandler)

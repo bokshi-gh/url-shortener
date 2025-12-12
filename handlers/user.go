@@ -5,8 +5,10 @@ import (
     "net/http"
 
     "golang.org/x/crypto/bcrypt"
-    "myapp/database"
-    "myapp/models"
+    "url-shortener/database"
+    "url-shortener/models"
+
+    "github.com/go-sql-driver/mysql"
 )
 
 type RegisterRequest struct {
@@ -15,6 +17,13 @@ type RegisterRequest struct {
 }
 
 func RegisterHandler(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Access-Control-Allow-Origin", "*")
+    w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+    w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+    if r.Method == http.MethodOptions {
+        return
+    }
+
     if r.Method != http.MethodPost {
         http.Error(w, "Invalid method", http.StatusMethodNotAllowed)
         return
@@ -46,10 +55,16 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 
     _, err = stmt.Exec(user.Username, user.Password)
     if err != nil {
-        http.Error(w, "Username already exists", http.StatusBadRequest)
+        // Check if duplicate username
+        if mysqlErr, ok := err.(*mysql.MySQLError); ok && mysqlErr.Number == 1062 {
+            http.Error(w, "Username already exists", http.StatusBadRequest)
+            return
+        }
+        http.Error(w, "Database error", http.StatusInternalServerError)
         return
     }
 
     w.WriteHeader(http.StatusCreated)
     w.Write([]byte("User registered successfully"))
 }
+

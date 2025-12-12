@@ -1,49 +1,39 @@
-let form = document.getElementsByTagName("form")[0];
-let username = document.getElementsByTagName("input")[0];
-let password = document.getElementsByTagName("input")[1];
-let button = document.getElementsByTagName("button")[0];
+let form = document.querySelector("form");
+let username = document.getElementById("username");
+let password = document.getElementById("password");
+let button = document.querySelector("button");
+let error = document.querySelector(".error");
 
-let error = document.getElementsByClassName("error")[0];
+button.addEventListener("click", async (e) => {
+    e.preventDefault();
+    error.style.display = "none";
 
-button.addEventListener("click", (e) => {
-	e.preventDefault();
-	
-	error.style.display = "none";
+    if (username.value === "" || password.value === "") {
+        error.textContent = "Input fields can't be empty!";
+        error.style.display = "block";
+        return;
+    }
 
-	if (username.value === "" || password.value === "") {
-		error.textContent = "Input fields can't be empty!";
-		error.style.display = "block";
-		return;
-	}
+    let options = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: username.value, password: password.value })
+    }
 
-	let options = {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json"
-		},
-		body: JSON.stringify({
-			username: username.value,
-			password: password.value
-		})
-	}
-
-	registerUser(options)
+    try {
+        let res = await fetch("http://localhost:8080/register", options);
+        if (res.ok) {
+            console.log("User registered successfully!");
+            form.reset();
+            window.location.href = "/pages/login.html";
+        } else {
+            let msg = await res.text();
+            error.textContent = msg;
+            error.style.display = "block";
+        }
+    } catch (err) {
+        error.textContent = "Network error!";
+        error.style.display = "block";
+    }
 });
-
-let registerUser = async function(options) {
-	let res = await fetch("http://localhost:8080/register", options);
-
-	if (res.ok) {
-		console.log("User registered successfully!");
-
-		form.reset();
-
-		window.location.pathname = "pages/login.html";
-	}
-	else {
-		error.textContent = "Some error occured while registering the account!";
-		error.style.display = "block";
-	}
-}
-
 

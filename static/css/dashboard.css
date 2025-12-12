@@ -7,7 +7,7 @@ header .username {
 	font-weight: bolder;
 }
 
-form {
+form-row {
 	display: flex;
 	gap: 0.3rem;
 }

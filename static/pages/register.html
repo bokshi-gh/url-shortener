@@ -3,10 +3,10 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" type="" href="../css/global.css" />
-	<link rel="stylesheet" type="" href="../css/authentication.css" />
+	<link rel="stylesheet" type="" href="/css/global.css" />
+	<link rel="stylesheet" type="" href="/css/authentication.css" />
 	<title>URL Shortner - Register</title>
-	<script src="js/register.js"></script>
+	<script src="/js/register.js" defer></script>
 </head>
 <body>
 	<div class="container">
@@ -17,16 +17,14 @@
 		<main>
 			<h3>Register</h3>
 
-			<div class="error">
-				Username is already taken!
-			</div>
+			<div class="error"></div>
 
 			<form>
 				<input type="text" name="" value="" placeholder="Username" required>
 				<input type="password" name="" value="" placeholder="Password" required>
 				<button type="submit">Register</button>
 			</form>
-			<p>Already have account? <a href="login.html">Login</a></p>
+			<p>Already have account? <a href="/pages/login.html">Login</a></p>
 		</main>
 	</div>
 </body>

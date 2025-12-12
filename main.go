@@ -18,17 +18,27 @@ func main() {
 	// http.HandleFunc("/delete-url", handlers.DeleteURLHandler)
 	// http.HandleFunc("/r/", handlers.RedirectURLHandler)
 
-
 	fs := http.FileServer(http.Dir("./static"))
-	http.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		path := filepath.Join("./static", r.URL.Path)
-		if _, err := os.Stat(path); os.IsNotExist(err) {
-			// If file doesn't exist, serve index.html (SPA support)
+
+		f, err := os.Open(path)
+		if err != nil {
 			http.ServeFile(w, r, "./static/index.html")
 			return
 		}
+		defer f.Close()
+
+		stat, _ := f.Stat()
+		if stat.IsDir() {
+			http.ServeFile(w, r, "./static/index.html")
+			return
+		}
+
 		fs.ServeHTTP(w, r)
-	}))
+	})
+	
 
 	log.Println("Server running at http://localhost:8080")
 	err := http.ListenAndServe(":8080", nil)
